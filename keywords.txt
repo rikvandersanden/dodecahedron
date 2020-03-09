@@ -1,0 +1,8 @@
+Dodecahedron   KEYWORD1
+EDGES   KEYWORD2
+VERTICES    KEYWORD2
+LEDS_PER_EDGE   KEYWORD2
+getStartVertex    KEYWORD2
+getEndVertex     KEYWORD2
+invert  KEYWORD2
+getNonHamiltonianEdge KEYWORD2
