@@ -2,12 +2,12 @@
 #include "Dodecahedron.h"
 
 // constructor
-Dodecahedron::Dodecahedron()
-{
+// Dodecahedron::Dodecahedron()
+// {
 
-}
+// }
 
-int Dodecahedron::getStartVertex(int edge)
+uint8_t Dodecahedron::getStartVertex(uint8_t edge)
 {
     if (edge < VERTICES)
         return edge;
@@ -18,37 +18,14 @@ int Dodecahedron::getStartVertex(int edge)
     return previousEndVertex + _startVertexOffset(index);
 }
 
-int Dodecahedron::getEndVertex(int edge)
+uint8_t Dodecahedron::getEndVertex(uint8_t edge)
 {
     if (edge < VERTICES)
         return (edge + 1) % VERTICES;
     return _TerminalVertices[edge - VERTICES];
 }
 
-int Dodecahedron::getHamiltonianEdge(int vertex)
-{
-    return invert((vertex + (VERTICES - 1)) % VERTICES);
-}
-
-int Dodecahedron::getNonHamiltonianEdge(int vertex)
-{
-    // find non-Hamiltonian edge which starts or ends at given vertex
-    for (int i = VERTICES; i < EDGES; i++)
-    {
-        if (getStartVertex(i) == vertex)
-            return i; // should go forward
-        if (getEndVertex(i) == vertex)
-            return invert(i); // should go backwards
-    }
-    // this should never happen
-    return 0;
-}
-
-int Dodecahedron::invert(int edge) {
-    return -edge - 1;
-}
-
-int Dodecahedron::_startVertexOffset(int shift)
+uint8_t Dodecahedron::_startVertexOffset(uint8_t shift)
 {
     if ((_START_VERTEX_BITMASK & 1 << shift) == 0)
         return 1;
