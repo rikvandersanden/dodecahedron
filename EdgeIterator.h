@@ -1,5 +1,7 @@
-#include "Arduino.h"
+//#include "Arduino.h"
+#include <cstdint>
 #include "Dodecahedron.h"
+#include "Edge.h"
 
 #ifndef EdgeIterator_h
 #define EdgeIterator_h
@@ -40,14 +42,16 @@ class EdgeIteratorForward : public EdgeIteratorBase
 {
   public:
     EdgeIteratorForward(uint8_t edge) : EdgeIteratorBase(edge) {}
-    virtual uint8_t currentLed() {
-        return (edge() * LEDS_PER_EDGE) + (_state & LEDS_PER_EDGE) - 1;
+    uint8_t currentLed() override {
+      return (edge() * LEDS_PER_EDGE) + (_state & LEDS_PER_EDGE) - 1;
     }
-    virtual uint8_t startVertex() {
-        return Dodecahedron::getStartVertex(edge());
+    uint8_t startVertex() override {
+      Edge foo(edge());
+      return foo.startVertex();
     }
-    virtual uint8_t endVertex() {
-        return Dodecahedron::getEndVertex(edge());
+    uint8_t endVertex() override {
+      Edge foo(edge());
+      return foo.endVertex();
     }
 };
 
@@ -55,14 +59,16 @@ class EdgeIteratorBackward : public EdgeIteratorBase
 {
   public:
     EdgeIteratorBackward(uint8_t edge) : EdgeIteratorBase(edge) {}
-    virtual uint8_t currentLed() {
+    uint8_t currentLed() override {
       return ((edge() + 1) * LEDS_PER_EDGE) - (_state & LEDS_PER_EDGE);
     }
-    virtual uint8_t startVertex() {
-      return Dodecahedron::getEndVertex(edge());
+    uint8_t startVertex() override {
+      Edge foo(edge());
+      return foo.endVertex();
     }
-    virtual uint8_t endVertex() {
-      return Dodecahedron::getStartVertex(edge());
+    uint8_t endVertex() override {
+      Edge foo(edge());
+      return foo.startVertex();
     }
 };
 

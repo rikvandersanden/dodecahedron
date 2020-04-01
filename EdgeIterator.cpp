@@ -1,6 +1,7 @@
-#include "Arduino.h"
+//#include "Arduino.h"
 #include "Dodecahedron.h"
-#include "Edgeiterator.h"
+#include "EdgeIterator.h"
+#include "Edge.h"
 
 EdgeIteratorBase *EdgeIteratorBase::getHamiltonianIterator(uint8_t vertex)
 {
@@ -11,9 +12,10 @@ EdgeIteratorBase *EdgeIteratorBase::getNonHamiltonianIterator(uint8_t vertex)
 {
   for (uint8_t i = VERTICES; i < EDGES; i++)
   {
-    if (Dodecahedron::getStartVertex(i) == vertex)
+    Edge edge(i);
+    if (edge.startVertex() == vertex)
         return new EdgeIteratorForward(i);
-    if (Dodecahedron::getEndVertex(i) == vertex)
+    if (edge.endVertex() == vertex)
         return new EdgeIteratorBackward(i);
   }
   // this should never happen
