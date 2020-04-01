@@ -12,13 +12,13 @@ class EdgeIteratorBase
     EdgeIteratorBase(uint8_t edge) {
         _state = edge << 3;
     }
-    uint8_t edge()
+    uint8_t getEdge()
     {
       return _state >> 3;
     }
     void reset()
     {
-      _state = edge() << 3;
+      _state = getEdge() << 3;
     }
     bool moveNext()
     {
@@ -29,9 +29,9 @@ class EdgeIteratorBase
  
        return true; 
     }
-    virtual uint8_t currentLed() = 0;
-    virtual uint8_t startVertex() = 0;
-    virtual uint8_t endVertex() = 0;
+    virtual uint8_t getCurrentLed() = 0;
+    virtual uint8_t getStartVertex() = 0;
+    virtual uint8_t getEndVertex() = 0;
     static EdgeIteratorBase *getHamiltonianIterator(uint8_t vertex);
     static EdgeIteratorBase *getNonHamiltonianIterator(uint8_t vertex);
   protected:
@@ -42,16 +42,16 @@ class EdgeIteratorForward : public EdgeIteratorBase
 {
   public:
     EdgeIteratorForward(uint8_t edge) : EdgeIteratorBase(edge) {}
-    uint8_t currentLed() override {
-      return (edge() * LEDS_PER_EDGE) + (_state & LEDS_PER_EDGE) - 1;
+    uint8_t getCurrentLed() override {
+      return (getEdge() * LEDS_PER_EDGE) + (_state & LEDS_PER_EDGE) - 1;
     }
-    uint8_t startVertex() override {
-      Edge foo(edge());
-      return foo.startVertex();
+    uint8_t getStartVertex() override {
+      Edge foo(getEdge());
+      return foo.getStartVertex();
     }
-    uint8_t endVertex() override {
-      Edge foo(edge());
-      return foo.endVertex();
+    uint8_t getEndVertex() override {
+      Edge foo(getEdge());
+      return foo.getEndVertex();
     }
 };
 
@@ -59,16 +59,16 @@ class EdgeIteratorBackward : public EdgeIteratorBase
 {
   public:
     EdgeIteratorBackward(uint8_t edge) : EdgeIteratorBase(edge) {}
-    uint8_t currentLed() override {
-      return ((edge() + 1) * LEDS_PER_EDGE) - (_state & LEDS_PER_EDGE);
+    uint8_t getCurrentLed() override {
+      return ((getEdge() + 1) * LEDS_PER_EDGE) - (_state & LEDS_PER_EDGE);
     }
-    uint8_t startVertex() override {
-      Edge foo(edge());
-      return foo.endVertex();
+    uint8_t getStartVertex() override {
+      Edge foo(getEdge());
+      return foo.getEndVertex();
     }
-    uint8_t endVertex() override {
-      Edge foo(edge());
-      return foo.startVertex();
+    uint8_t getEndVertex() override {
+      Edge foo(getEdge());
+      return foo.getStartVertex();
     }
 };
 

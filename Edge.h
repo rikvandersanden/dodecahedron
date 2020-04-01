@@ -10,13 +10,12 @@ class Edge
     {
       _edge = edge;
     }
-    uint8_t startVertex();
-    uint8_t endVertex();
+    uint8_t getStartVertex();
+    uint8_t getEndVertex();
   private:
     int8_t _edge;
-    uint8_t _startVertexOffset(uint8_t shift);
-    const static uint8_t _TerminalVertices[];
-    const static uint8_t _START_VERTEX_BITMASK;
+    const static uint8_t _endVertices[];
+    const static uint8_t _startVertices[];
 };
 
 #endif

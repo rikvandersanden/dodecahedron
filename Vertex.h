@@ -11,9 +11,9 @@ class Vertex
     {
       _vertex = vertex;
     }
-    int8_t defaultEdge();
-    int8_t hamiltonianEdge();
-    int8_t nonHamiltonianEdge();
+    int8_t getDefaultEdge();
+    int8_t getHamiltonianEdge();
+    int8_t getNonHamiltonianEdge();
   private:
     uint8_t _vertex;
 };

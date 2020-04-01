@@ -13,9 +13,9 @@ EdgeIteratorBase *EdgeIteratorBase::getNonHamiltonianIterator(uint8_t vertex)
   for (uint8_t i = VERTICES; i < EDGES; i++)
   {
     Edge edge(i);
-    if (edge.startVertex() == vertex)
+    if (edge.getStartVertex() == vertex)
         return new EdgeIteratorForward(i);
-    if (edge.endVertex() == vertex)
+    if (edge.getEndVertex() == vertex)
         return new EdgeIteratorBackward(i);
   }
   // this should never happen

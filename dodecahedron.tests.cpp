@@ -12,7 +12,7 @@ void printVertices()
     for (int i = 0; i<20; i++)
     {
         Vertex v(i);
-        std::cout << int(v.defaultEdge()) << " " << int(v.hamiltonianEdge()) << " " << int(v.nonHamiltonianEdge());
+        std::cout << int(v.getDefaultEdge()) << " " << int(v.getHamiltonianEdge()) << " " << int(v.getNonHamiltonianEdge());
         std::cout << std::endl;
     }
 }
@@ -23,7 +23,7 @@ void printEdges()
     for (int i = 0; i<30; i++)
     {
         Edge e(i);
-        std::cout << int(e.startVertex()) << " " << int(e.endVertex());
+        std::cout << int(e.getStartVertex()) << " " << int(e.getEdVertex());
         std::cout << std::endl;
     }
 }

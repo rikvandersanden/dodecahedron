@@ -4,31 +4,22 @@
 #include "Edge.h"
 #include "Vertex.h"
 
-const uint8_t Edge::_TerminalVertices[] = {4, 7, 15, 10, 2, 11, 19, 5, 16, 13};
-const uint8_t Edge::_START_VERTEX_BITMASK = 93;
+const uint8_t Edge::_startVertices[] = { 0, 3, 8,14, 9, 1,12,18, 6,17};
+const uint8_t Edge::_endVertices[]   = { 4, 7,15,10, 2,11,19, 5,16,13};
 
-uint8_t Edge::startVertex()
+uint8_t Edge::getStartVertex()
 {
     if (_edge < VERTICES)
         return _edge;
-    if (_edge == VERTICES)
-        return 0;
     
-    int index = _edge - VERTICES - 1;
-    int previousEndVertex = _TerminalVertices[index];
-    return previousEndVertex + _startVertexOffset(index);
+    return _startVertices[_edge - VERTICES];
 }
 
-uint8_t Edge::endVertex()
+uint8_t Edge::getEndVertex()
 {
     if (_edge < VERTICES)
         return (_edge + 1) % VERTICES;
-    return _TerminalVertices[_edge - VERTICES];
+
+    return _endVertices[_edge - VERTICES];
 }
 
-uint8_t Edge::_startVertexOffset(uint8_t shift)
-{
-    if ((_START_VERTEX_BITMASK & 1 << shift) == 0)
-        return 1;
-    return -1;
-}
