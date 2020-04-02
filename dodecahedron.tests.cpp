@@ -6,6 +6,7 @@
 #include "Edge.h"
 #include "EdgeIterator.h"
 #include "Vertex.h"
+#include "Bleeder.h"
 
 void printVertices()
 {
@@ -61,6 +62,20 @@ void testIterators()
     std::cout << std::endl;
 }
 
+void testBleeder()
+{
+    Bleeder sut(new EdgeIteratorForward(0));
+    while(sut.moveNext())
+    {
+        EdgeIteratorBase** iterators = sut.getIterators();
+        for(int i = 0; i < sut.count(); i++)
+        {
+            std::cout << int(iterators[i]->getEdge()) << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 int main()
 {
     // vector<string> msg {"Hello", "C++", "World", "from", "VS Code", "and the C++ extension!"};
@@ -71,5 +86,5 @@ int main()
     // }
     // cout << endl;
 
-    testIterators();
+    testBleeder();
 }

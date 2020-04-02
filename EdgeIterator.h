@@ -31,8 +31,14 @@ class EdgeIteratorBase
        return true; 
     }
     virtual uint8_t getCurrentLed() = 0;
+    virtual uint8_t begin() = 0;
+    virtual uint8_t end() = 0;
     virtual uint8_t getStartVertex() = 0;
     virtual uint8_t getEndVertex() = 0;
+    // EdgeIteratorBase *operator ++ (){
+    //   moveNext();
+    //   return this;
+    // }
     virtual EdgeIteratorBase *getNextA() = 0;
     virtual EdgeIteratorBase *getNextB() = 0;
     static EdgeIteratorBase *getHamiltonianIterator(uint8_t vertex);
@@ -47,6 +53,12 @@ class EdgeIteratorForward : public EdgeIteratorBase
     EdgeIteratorForward(uint8_t edge) : EdgeIteratorBase(edge) {}
     uint8_t getCurrentLed() override {
       return (getEdge() * LEDS_PER_EDGE) + (_state & LEDS_PER_EDGE) - 1;
+    }
+    uint8_t begin() override {
+      return getEdge() * LEDS_PER_EDGE;
+    }
+    uint8_t end() override {
+      return getEdge() * (LEDS_PER_EDGE + 1) - 1;
     }
     uint8_t getStartVertex() override {
       Edge foo(getEdge());
@@ -78,6 +90,12 @@ class EdgeIteratorBackward : public EdgeIteratorBase
     EdgeIteratorBackward(uint8_t edge) : EdgeIteratorBase(edge) {}
     uint8_t getCurrentLed() override {
       return ((getEdge() + 1) * LEDS_PER_EDGE) - (_state & LEDS_PER_EDGE);
+    }
+    uint8_t begin() override {
+      return getEdge() * (LEDS_PER_EDGE + 1) -1;
+    }
+    uint8_t end() override {
+      return getEdge() * LEDS_PER_EDGE;
     }
     uint8_t getStartVertex() override {
       Edge foo(getEdge());
