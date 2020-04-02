@@ -2,6 +2,7 @@
 #include <cstdint>
 #include "Dodecahedron.h"
 #include "Edge.h"
+#include "Vertex.h"
 
 #ifndef EdgeIterator_h
 #define EdgeIterator_h
@@ -32,6 +33,8 @@ class EdgeIteratorBase
     virtual uint8_t getCurrentLed() = 0;
     virtual uint8_t getStartVertex() = 0;
     virtual uint8_t getEndVertex() = 0;
+    virtual EdgeIteratorBase *getNextA() = 0;
+    virtual EdgeIteratorBase *getNextB() = 0;
     static EdgeIteratorBase *getHamiltonianIterator(uint8_t vertex);
     static EdgeIteratorBase *getNonHamiltonianIterator(uint8_t vertex);
   protected:
@@ -53,6 +56,20 @@ class EdgeIteratorForward : public EdgeIteratorBase
       Edge foo(getEdge());
       return foo.getEndVertex();
     }
+    EdgeIteratorBase *getNextA() override {
+      return new EdgeIteratorForward(getEndVertex());
+    }
+    EdgeIteratorBase *getNextB() override {
+    
+      if (getEdge() < VERTICES)
+      {
+        return getNonHamiltonianIterator(getEndVertex());
+      }
+      else
+      {
+        return getHamiltonianIterator(getEndVertex());
+      }
+    }
 };
 
 class EdgeIteratorBackward : public EdgeIteratorBase
@@ -69,6 +86,19 @@ class EdgeIteratorBackward : public EdgeIteratorBase
     uint8_t getEndVertex() override {
       Edge foo(getEdge());
       return foo.getStartVertex();
+    }
+    EdgeIteratorBase *getNextA() override {
+      return getHamiltonianIterator(getEndVertex());
+    }
+    EdgeIteratorBase *getNextB() override {
+      if (getEdge() < VERTICES)
+      {
+        return getNonHamiltonianIterator(getEndVertex());
+      }
+      else
+      {
+        return new EdgeIteratorForward(getEndVertex());
+      }
     }
 };
 

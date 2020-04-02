@@ -4,6 +4,7 @@
 #include "assert.h"
 
 #include "Edge.h"
+#include "EdgeIterator.h"
 #include "Vertex.h"
 
 void printVertices()
@@ -23,9 +24,41 @@ void printEdges()
     for (int i = 0; i<30; i++)
     {
         Edge e(i);
-        std::cout << int(e.getStartVertex()) << " " << int(e.getEdVertex());
+        std::cout << int(e.getStartVertex()) << " " << int(e.getEndVertex());
         std::cout << std::endl;
     }
+}
+
+void testIterators()
+{
+    const int numberOfCycles = 4;
+
+    EdgeIteratorBase* iterators[1 << numberOfCycles] = { new EdgeIteratorForward(0) };
+    for (int cycle = 0; cycle < numberOfCycles; cycle++)
+    {
+        int numberOfIterators = 1 << cycle;
+        for (int i = 0; i < numberOfIterators; i++)
+        {
+            std::cout << int(iterators[i]->getEdge()) << " ";
+        }
+        std::cout << std::endl;
+
+        int index = numberOfIterators;
+        for (int i = 0; i < numberOfIterators; i++)
+        {
+            EdgeIteratorBase *previous = iterators[i];
+            iterators[index] = previous->getNextA();
+            index = (index+1) % (numberOfIterators*2);
+            iterators[index] = previous->getNextB();
+            index = (index+1) % (numberOfIterators*2);
+            delete previous;
+        }
+    }
+    for (int i = 0; i < (1 << numberOfCycles); i++)
+    {
+        std::cout << int(iterators[i]->getEdge()) << " ";
+    }
+    std::cout << std::endl;
 }
 
 int main()
@@ -38,5 +71,5 @@ int main()
     // }
     // cout << endl;
 
-    printEdges();
+    testIterators();
 }
