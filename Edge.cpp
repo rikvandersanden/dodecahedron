@@ -1,11 +1,20 @@
-//include "Arduino.h"
-#include <cstdint>
+#ifdef ARDUINO
+  #include "Arduino.h"
+#else
+  #include <cstdint>
+#endif
+
 #include "Dodecahedron.h"
 #include "Edge.h"
 #include "Vertex.h"
 
 const uint8_t Edge::_startVertices[] = { 0, 3, 8,14, 9, 1,12,18, 6,17};
 const uint8_t Edge::_endVertices[]   = { 4, 7,15,10, 2,11,19, 5,16,13};
+
+uint8_t Edge::getEdge()
+{
+    return _edge;
+}
 
 uint8_t Edge::getStartVertex()
 {

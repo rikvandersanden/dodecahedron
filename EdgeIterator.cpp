@@ -1,4 +1,3 @@
-//#include "Arduino.h"
 #include "Dodecahedron.h"
 #include "EdgeIterator.h"
 #include "Edge.h"

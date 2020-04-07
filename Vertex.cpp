@@ -1,5 +1,9 @@
-//#include "Arduino.h"
-#include <cstdint>
+#ifdef ARDUINO
+  #include "Arduino.h"
+#else
+  #include <cstdint>
+#endif
+
 #include "Dodecahedron.h"
 #include "Edge.h"
 #include "Vertex.h"

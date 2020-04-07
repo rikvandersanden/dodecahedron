@@ -1,5 +1,8 @@
-//#include "Arduino.h"
-#include <cstdint>
+#ifdef ARDUINO
+  #include "Arduino.h"
+#else
+  #include <cstdint>
+#endif
 
 #ifndef Vertex_h
 #define Vertex_h

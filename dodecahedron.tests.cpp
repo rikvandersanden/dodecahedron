@@ -1,3 +1,5 @@
+#ifndef ARDUINO
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -7,6 +9,7 @@
 #include "EdgeIterator.h"
 #include "Vertex.h"
 #include "Bleeder.h"
+#include "Rotation.h"
 
 void printVertices()
 {
@@ -76,15 +79,60 @@ void testBleeder()
     }
 }
 
+uint32_t   Color(uint8_t r, uint8_t g, uint8_t b) {
+    return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
+  }
+
+uint32_t   Color(uint8_t r, uint8_t g, uint8_t b, uint8_t w) {
+    return ((uint32_t)w << 24) | ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
+}
+
+void testColors()
+{
+    uint32_t colors[3] = {
+        Color(255,  0,  0),
+        Color(  0,255,  0),
+        Color(  0,  0,255),
+    };
+    uint32_t blue = Color(0,0,255);
+
+    for(int i = 0; i < 3; i++)
+    {
+        uint32_t hasBlue = colors[i] & blue;
+        uint32_t newColor = 0;
+        if (hasBlue == 0)
+        {
+            newColor = colors[i] | blue;
+        }
+        else
+        {
+            newColor = colors[i] & ~blue;
+        }
+        std::cout << newColor << " ";
+    }
+}
+
+void testScan()
+{
+  for(int i = 0; i < 65536; i+=256)
+  {
+    std::cout << "Angle: " << i;
+    std::cout << std::endl;
+    for(int l = 0; l < 210; l++)
+    {
+      int angleDifference = (1<<15) - abs(abs(ANGLES[l] - i) - (1<<15));
+      int brightness = 255 - (angleDifference/4);
+      if (brightness > 0)
+      {
+        std::cout << "LED: " << l << " Brightness: " << brightness << " ";
+        std::cout << std::endl;
+      }
+    }
+  }
+}
+
 int main()
 {
-    // vector<string> msg {"Hello", "C++", "World", "from", "VS Code", "and the C++ extension!"};
-    
-    // for (const string& word : msg)
-    // {
-    //     cout << word << " ";
-    // }
-    // cout << endl;
-
-    testBleeder();
+    testScan();
 }
+#endif
