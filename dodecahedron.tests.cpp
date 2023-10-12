@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <typeinfo>
 #include "assert.h"
 
 #include "Edge.h"
@@ -65,51 +66,45 @@ void testIterators()
     std::cout << std::endl;
 }
 
-void testBleeder()
+void testBleeders()
 {
-    Bleeder sut(new EdgeIteratorForward(0));
-    while(sut.moveNext())
+  Bleeder bleeders[3] = {
+    new EdgeIteratorForward(0),
+    EdgeIteratorBase::getHamiltonianIterator(0),
+    EdgeIteratorBase::getNonHamiltonianIterator(0)
+  };
+
+    bool iterationsRemaining = true;
+
+  while(iterationsRemaining)
+  {
+    for (int b = 0; b < 3; b++)
     {
-        EdgeIteratorBase** iterators = sut.getIterators();
-        for(int i = 0; i < sut.count(); i++)
+      iterationsRemaining = bleeders[b].moveNext() && iterationsRemaining;
+    }
+    // for each edge in each bleeder, light up the next led until the edges are full
+    bool ledsRemaining = true;
+   
+    do
+    {
+      for (int b = 0; b < 3; b++)
+      {
+        for (int i = 0; i < bleeders[b].count(); i++)
         {
-            std::cout << int(iterators[i]->getEdge()) << " ";
+          if (bleeders[b].getIterators()[i]->moveNext())
+          {
+            std::cout << int(bleeders[b].getIterators()[i]->getCurrentLed()) << " ";
+          }
+          else
+          {
+              ledsRemaining = false;
+          }
         }
         std::cout << std::endl;
-    }
-}
-
-uint32_t   Color(uint8_t r, uint8_t g, uint8_t b) {
-    return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
+      }
+      std::cout << std::endl;
+    } while (ledsRemaining);
   }
-
-uint32_t   Color(uint8_t r, uint8_t g, uint8_t b, uint8_t w) {
-    return ((uint32_t)w << 24) | ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
-}
-
-void testColors()
-{
-    uint32_t colors[3] = {
-        Color(255,  0,  0),
-        Color(  0,255,  0),
-        Color(  0,  0,255),
-    };
-    uint32_t blue = Color(0,0,255);
-
-    for(int i = 0; i < 3; i++)
-    {
-        uint32_t hasBlue = colors[i] & blue;
-        uint32_t newColor = 0;
-        if (hasBlue == 0)
-        {
-            newColor = colors[i] | blue;
-        }
-        else
-        {
-            newColor = colors[i] & ~blue;
-        }
-        std::cout << newColor << " ";
-    }
 }
 
 void testScan()
@@ -131,8 +126,46 @@ void testScan()
   }
 }
 
+void testAngleDifference()
+{
+    uint16_t angles[] = { 35000, 65000, 65535, 0, 255, 30000, 32767, 32768};
+    uint16_t angle = 0;
+    for (int i = 0; i < 8; i++)
+    {
+        int16_t diff = angle - angles[i];
+        std::cout << typeid(diff).name() << ": " << diff;
+        std::cout << std::endl;
+    }
+    int16_t x = -32768;
+    int16_t brightness = abs(x);
+    std::cout << "brightnes:" << brightness;
+}
+
+void testCoordinates()
+{
+    for(int e=0; e < EDGES; e++)
+    {
+        Edge edge(e);
+        std::cout << "Edge #" << e << " from vertex " << (int)edge.getStartVertex() << " to " << (int)edge.getEndVertex();
+        std::cout << std::endl;
+        for(int led=0; led < LEDS_PER_EDGE; led++)
+        {
+            std::cout << "LED #" << led << ": " << edge.getX(led) << "," << edge.getY(led) << "," << edge.getZ(led);
+            std::cout << std::endl;
+            
+            uint8_t saturation = abs(edge.getZ(led)) < 24000
+              ? 255
+              : 255 - (((uint16_t)abs(edge.getZ(led))) >> 5);
+            std::cout << "Saturation: " <<  (int)(saturation);
+            std::cout << std::endl;
+        }
+    }
+}
+
+
+
 int main()
 {
-    testScan();
+    testCoordinates();
 }
 #endif

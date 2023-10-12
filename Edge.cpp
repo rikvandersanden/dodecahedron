@@ -32,3 +32,33 @@ uint8_t Edge::getEndVertex()
     return _endVertices[_edge - VERTICES];
 }
 
+int16_t Edge::getX(uint8_t led)
+{
+    Vertex start(getStartVertex());
+    Vertex end(getEndVertex());
+    
+    int32_t diff = end.getX() - start.getX();
+    int16_t relative = (diff * (1 + led)) / 8;
+    return start.getX() + relative;
+}
+
+int16_t Edge::getY(uint8_t led)
+{
+    Vertex start(getStartVertex());
+    Vertex end(getEndVertex());
+    
+    int32_t diff = end.getY() - start.getY();
+    int16_t relative = (diff * (1 + led)) / 8;
+    return start.getY() + relative;
+}
+
+int16_t Edge::getZ(uint8_t led)
+{
+    Vertex start(getStartVertex());
+    Vertex end(getEndVertex());
+    
+    int32_t diff = end.getZ() - start.getZ();
+    int16_t relative = (diff * (1 + led)) / 8;
+    return start.getZ() + relative;
+}
+
